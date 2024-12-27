@@ -1,30 +1,32 @@
-import 'package:equatable/equatable.dart';
+part of 'home_bloc.dart';
 
-import '../../../models/payment_data.dart';
-
-abstract class HomeState extends Equatable {
-  @override
-  List<Object> get props => [];
-}
+@immutable
+sealed class HomeState {}
 
 class HomeInitial extends HomeState {}
 
-class ChartDataLoading extends HomeState {}
+class HomeLoading extends HomeState {}
 
-class ChartDataLoaded extends HomeState {
+class HomeLoaded extends HomeState {
+  final String selectedYear;
   final List<PaymentData> chartData;
 
-  ChartDataLoaded(this.chartData);
-
-  @override
-  List<Object> get props => [chartData];
+  HomeLoaded({
+    required this.selectedYear,
+    required this.chartData,
+  });
 }
 
-class ChartDataError extends HomeState {
-  final String error;
+class HomeError extends HomeState {
+  final String message;
+  HomeError({required this.message});
+}
 
-  ChartDataError(this.error);
+// lib/features/home/models/payment_data.dart
+class PaymentData {
+  final String month;
+  final double collectedAmount;
+  final double pendingAmount;
 
-  @override
-  List<Object> get props => [error];
+  PaymentData(this.month, this.collectedAmount, this.pendingAmount);
 }

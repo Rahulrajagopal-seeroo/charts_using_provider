@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rahul_bloc_login/features/auth/bloc/auth_bloc.dart';
-import 'package:rahul_bloc_login/pages/screens/home_screen.dart';
+import 'package:rahul_bloc_login/features/home/screen/home_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

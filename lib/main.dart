@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:rahul_bloc_login/features/auth/bloc/auth_bloc.dart';
-import 'package:rahul_bloc_login/pages/screens/home_screen.dart';
+import 'package:rahul_bloc_login/features/home/screen/home_screen.dart';
+
+import 'features/home/bloc/home_bloc.dart';
 // import 'package:rahul_bloc_login/features/auth/screen/login_page.dart';
 
-import 'controller/chart_controller.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ChartController(),
-      child: const MyApp(),
-    ),
+    const MyApp(),
   );
 }
 
@@ -22,8 +19,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(),
+        ),
+        BlocProvider<HomeBloc>(
+          create: (context) => HomeBloc()..add(LoadHomeData()),
+        ),
+      ],
       child: MaterialApp(
         title: 'BLoC Login',
         debugShowCheckedModeBanner: false,

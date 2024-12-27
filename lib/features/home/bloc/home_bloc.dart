@@ -1,22 +1,24 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../models/payment_data.dart';
-import 'home_event.dart';
-import 'home_state.dart';
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
+
+part 'home_event.dart';
+part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitial()) {
-    on<LoadChartData>(_onLoadChartData);
+    on<LoadHomeData>(_onLoadHomeData);
+    on<ChangeYear>(_onChangeYear);
   }
 
-  void _onLoadChartData(LoadChartData event, Emitter<HomeState> emit) async {
-    emit(ChartDataLoading());
-    try {
-      // Simulate a delay for loading data
-      await Future.delayed(const Duration(seconds: 1));
+  void _onLoadHomeData(LoadHomeData event, Emitter<HomeState> emit) {
+    final chartData = _getChartData('2023');
+    emit(HomeLoaded(selectedYear: '2023', chartData: chartData));
+  }
+
+  void _onChangeYear(ChangeYear event, Emitter<HomeState> emit) {
+    if (state is HomeLoaded) {
       final chartData = _getChartData(event.year);
-      emit(ChartDataLoaded(chartData));
-    } catch (e) {
-      emit(ChartDataError("Failed to load chart data"));
+      emit(HomeLoaded(selectedYear: event.year, chartData: chartData));
     }
   }
 
@@ -51,6 +53,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           PaymentData('Oct', 5, 1),
           PaymentData('Nov', 4, 2),
           PaymentData('Dec', 5, 1),
+        ];
+      case '2025':
+        return [
+          PaymentData('Jan', 5, 3),
+          PaymentData('Feb', 6, 2),
+          PaymentData('Mar', 4, 1),
+          PaymentData('Apr', 7, 2),
+          PaymentData('May', 5, 3),
+          PaymentData('Jun', 6, 1),
+          PaymentData('Jul', 4, 2),
+          PaymentData('Aug', 5, 1),
+          PaymentData('Sep', 6, 2),
+          PaymentData('Oct', 4, 3),
+          PaymentData('Nov', 5, 1),
+          PaymentData('Dec', 7, 2),
         ];
       default:
         return [];
